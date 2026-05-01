@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=JetBrains+Mono:wght@400;500&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand: #FF4500;
+  --brand-2: #FF6B35;
+  --brand-glow: rgba(255,69,0,0.15);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  background: #080809;
+  color: #F2EFE9;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--brand); color: white; }
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: #0E0E10; }
+::-webkit-scrollbar-thumb { background: #232327; border-radius: 2px; }
+
+/* Noise texture */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@layer components {
+  .card { @apply bg-bg-2 border border-white/[0.06] rounded-2xl; }
+  .card-hover { @apply transition-all duration-200 hover:border-white/10 hover:-translate-y-0.5; }
+  .btn-brand { @apply bg-brand text-white font-semibold rounded-xl px-5 py-2.5 text-sm transition-all hover:bg-brand-2 hover:-translate-y-0.5 active:translate-y-0; }
+  .btn-ghost { @apply bg-bg-3 border border-white/[0.09] text-white/80 font-medium rounded-xl px-4 py-2 text-sm transition-all hover:bg-bg-4; }
+  .input-field { @apply w-full bg-bg-3 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition-all; }
+  .page-title { @apply font-display text-3xl font-extrabold tracking-tight mb-1; }
+  .page-sub { @apply text-sm text-white/40 mb-7; }
+  .section-title { @apply font-display text-base font-bold; }
+  .badge-hot { @apply text-[10px] font-bold tracking-wide uppercase bg-brand/10 text-brand border border-brand/20 px-2 py-0.5 rounded-full; }
+  .badge-new { @apply text-[10px] font-bold tracking-wide uppercase bg-green-500/10 text-green-400 border border-green-500/20 px-2 py-0.5 rounded-full; }
+  .badge-live { @apply text-[10px] font-bold tracking-wide uppercase bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded-full; }
+  .filter-pill { @apply px-3.5 py-1.5 rounded-full text-xs font-medium bg-bg-3 border border-white/[0.09] text-white/50 cursor-pointer transition-all hover:text-white; }
+  .filter-pill-active { @apply bg-brand border-brand text-white; }
+}

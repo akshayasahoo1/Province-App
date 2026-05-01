@@ -1,0 +1,362 @@
+# ProvinceApp v2 — Complete Run & Deploy Guide
+# provinceapp.in
+
+==================================================
+STEP 1 — INSTALL TOOLS (One time only)
+==================================================
+
+1. Download Node.js from nodejs.org → Install LTS version
+2. Download Git from git-scm.com → Install
+3. Download VS Code from code.visualstudio.com → Install
+
+Verify in terminal:
+  node --version   → should show v18+
+  npm --version    → should show v9+
+  git --version    → should show git version
+
+
+==================================================
+STEP 2 — CREATE GITHUB REPO (One time)
+==================================================
+
+1. Go to github.com → Sign up free
+2. Click + → New Repository
+3. Name: provinceapp
+4. Set to: Public
+5. Click: Create Repository
+6. Copy your repo URL:
+   https://github.com/YOURNAME/provinceapp.git
+
+
+==================================================
+STEP 3 — SET UP PROJECT ON YOUR COMPUTER
+==================================================
+
+Open terminal and run:
+
+  # Clone or create project folder
+  mkdir provinceapp
+  cd provinceapp
+
+  # Copy all downloaded files into this folder
+  # Folder structure should look like:
+  #
+  # provinceapp/
+  # ├── package.json
+  # ├── frontend/
+  # │   ├── package.json
+  # │   ├── index.html
+  # │   ├── vite.config.js
+  # │   ├── tailwind.config.js
+  # │   └── src/
+  # │       ├── main.jsx
+  # │       ├── App.jsx
+  # │       ├── index.css
+  # │       ├── lib/
+  # │       ├── store/
+  # │       ├── components/
+  # │       └── pages/
+  # ├── backend/
+  # │   ├── package.json
+  # │   ├── server.js
+  # │   ├── .env.example
+  # │   ├── lib/
+  # │   ├── middleware/
+  # │   └── routes/
+  # └── database/
+  #     └── schema.sql
+
+  # Initialize git
+  git init
+  git remote add origin https://github.com/YOURNAME/provinceapp.git
+
+
+==================================================
+STEP 4 — SETUP SUPABASE DATABASE
+==================================================
+
+1. Go to supabase.com → Sign up with GitHub (free)
+2. Click "New Project"
+   - Name: provinceapp
+   - Database Password: (save this somewhere safe)
+   - Region: South Asia (ap-south-1)
+3. Click "Create new project" — wait 2 minutes
+
+4. Go to SQL Editor (left sidebar)
+5. Click "+ New Query"
+6. Open the file: database/schema.sql
+7. Copy ALL content → paste into SQL Editor
+8. Click "RUN" button
+   → You will see "Success" for each table
+
+9. Go to Settings → API (left sidebar)
+10. Copy and save these two values:
+    - Project URL:  https://xxxx.supabase.co
+    - Anon (public) key: eyJxxx... (long string)
+    - Service role key: eyJxxx... (different long string)
+
+
+==================================================
+STEP 5 — CONFIGURE ENVIRONMENT VARIABLES
+==================================================
+
+In the BACKEND folder:
+  Copy .env.example → rename to .env
+  Fill in:
+
+    PORT=5000
+    NODE_ENV=development
+    SUPABASE_URL=https://your-project-id.supabase.co
+    SUPABASE_SERVICE_KEY=your-service-role-key
+    SUPABASE_ANON_KEY=your-anon-key
+    JWT_SECRET=make-up-any-random-long-string-here
+    FRONTEND_URL=http://localhost:5173
+
+In the FRONTEND folder:
+  Copy .env.example → rename to .env
+  Fill in:
+
+    VITE_API_URL=http://localhost:5000/api
+    VITE_SUPABASE_URL=https://your-project-id.supabase.co
+    VITE_SUPABASE_ANON_KEY=your-anon-key
+
+
+==================================================
+STEP 6 — INSTALL DEPENDENCIES
+==================================================
+
+In terminal from the root provinceapp/ folder:
+
+  # Install backend dependencies
+  cd backend
+  npm install
+
+  # Install frontend dependencies
+  cd ../frontend
+  npm install
+
+  # Go back to root
+  cd ..
+
+
+==================================================
+STEP 7 — RUN LOCALLY (Development)
+==================================================
+
+Open TWO terminal windows:
+
+Terminal 1 (Backend):
+  cd provinceapp/backend
+  npm run dev
+  → Should show: ✅ ProvinceApp API running on http://localhost:5000
+
+Terminal 2 (Frontend):
+  cd provinceapp/frontend
+  npm run dev
+  → Should show: Local: http://localhost:5173
+
+Open browser → go to: http://localhost:5173
+Your app is running locally! 🎉
+
+
+==================================================
+STEP 8 — PUSH TO GITHUB
+==================================================
+
+In terminal from root folder:
+
+  git add .
+  git commit -m "ProvinceApp v2 - Full stack launch"
+  git push -u origin main
+
+All your code is now saved on GitHub.
+
+
+==================================================
+STEP 9 — DEPLOY FRONTEND ON VERCEL (Free)
+==================================================
+
+1. Go to vercel.com → Sign up with GitHub
+2. Click "Add New Project"
+3. Click "Import" next to your provinceapp repo
+4. Configure:
+   - Framework Preset: Vite
+   - Root Directory: frontend
+   - Build Command: npm run build
+   - Output Directory: dist
+5. Add Environment Variables (click "Environment Variables"):
+   VITE_API_URL          = https://your-backend.railway.app/api
+   VITE_SUPABASE_URL     = https://your-project.supabase.co
+   VITE_SUPABASE_ANON_KEY = your-anon-key
+6. Click "Deploy"
+7. In ~60 seconds your frontend is live at:
+   something.vercel.app
+
+
+==================================================
+STEP 10 — DEPLOY BACKEND ON RAILWAY (Free)
+==================================================
+
+1. Go to railway.app → Sign up with GitHub
+2. Click "New Project" → "Deploy from GitHub repo"
+3. Select your provinceapp repo
+4. Click "Add Service" → select the backend/ folder
+5. Go to Variables tab → add all your .env values:
+   PORT                = 5000
+   NODE_ENV            = production
+   SUPABASE_URL        = https://your-project.supabase.co
+   SUPABASE_SERVICE_KEY = your-service-role-key
+   SUPABASE_ANON_KEY   = your-anon-key
+   JWT_SECRET          = your-secret-key
+   FRONTEND_URL        = https://provinceapp.in
+   PRODUCTION_URL      = https://provinceapp.in
+6. Click Deploy
+7. Railway gives you a URL like:
+   https://provinceapp-production.railway.app
+
+8. Copy this URL
+9. Go back to Vercel → your project → Settings → Environment Variables
+10. Update VITE_API_URL to:
+    https://provinceapp-production.railway.app/api
+11. Redeploy frontend in Vercel (click Redeploy)
+
+
+==================================================
+STEP 11 — CONNECT provinceapp.in DOMAIN
+==================================================
+
+A) Add domain to Vercel:
+  1. Vercel → Your project → Settings → Domains
+  2. Click "Add Domain"
+  3. Type: provinceapp.in → Add
+  4. Also add: www.provinceapp.in
+
+B) Update DNS at your domain registrar
+   (where you bought provinceapp.in):
+
+  Login → DNS Settings → Add records:
+
+  Type    Name    Value                     TTL
+  A       @       76.76.21.21               Auto
+  CNAME   www     cname.vercel-dns.com      Auto
+
+  Save and wait 10–30 minutes.
+
+C) Back in Vercel → Domains → Click "Verify"
+   Vercel auto-enables HTTPS/SSL ✅
+
+
+==================================================
+STEP 12 — VERIFY EVERYTHING IS WORKING
+==================================================
+
+  ✅ Go to provinceapp.in → app loads
+  ✅ Select Institution → LPU → Dashboard shows
+  ✅ Restaurants → menu opens
+  ✅ Register an account → login works
+  ✅ Chat → messages send in real-time
+  ✅ Confession → post works
+  ✅ Discussion → post & vote works
+  ✅ Lost & Found → report works
+  ✅ Feedback → submit works
+  ✅ CGPA Calculator → math is correct
+
+
+==================================================
+STEP 13 — AUTO-DEPLOY WORKFLOW (Every future update)
+==================================================
+
+Whenever you change ANYTHING in the code:
+
+  git add .
+  git commit -m "describe what you changed"
+  git push
+
+Vercel and Railway detect the push automatically
+and redeploy in about 60 seconds. provinceapp.in
+updates automatically. Zero manual work. ✅
+
+
+==================================================
+HOW TO ADD NEW FEATURES LATER
+==================================================
+
+ADD A NEW RESTAURANT:
+  Open: frontend/src/pages/Restaurants.jsx
+  Find: const STATIC = [...]
+  Add a new object to the array
+  git add . && git commit -m "Added new restaurant" && git push
+
+ADD A NEW SUBJECT/COURSE:
+  Open: frontend/src/pages/Academics.jsx
+  Find: const COURSES = {...}
+  Add new course key and semesters
+  git add . && git commit -m "Added new course" && git push
+
+ADD A NEW PAGE/FEATURE:
+  1. Create: frontend/src/pages/NewFeature.jsx
+  2. Open: frontend/src/App.jsx
+  3. Import: import NewFeature from './pages/NewFeature'
+  4. Add: <Route path="/newfeature" element={<NewFeature />} />
+  5. Add module card in Dashboard.jsx MODULES array
+  6. git add . && git commit -m "Added new feature" && git push
+
+ADD A NEW API ROUTE:
+  1. Create: backend/routes/newroute.js
+  2. Open: backend/server.js
+  3. Add: app.use('/api/newroute', require('./routes/newroute'))
+  4. Add to: frontend/src/lib/api.js
+  5. git push → Railway auto-redeploys
+
+
+==================================================
+COST BREAKDOWN
+==================================================
+
+  Vercel (frontend hosting)  → FREE until 100GB/month
+  Railway (backend hosting)  → FREE 500 hours/month
+  Supabase (database)        → FREE until 50,000 users
+  GitHub (code storage)      → FREE forever
+  provinceapp.in (domain)    → Already yours
+  SSL/HTTPS certificate      → FREE (auto by Vercel)
+
+  TOTAL COST = ₹0/month until you hit big scale 🎉
+
+
+==================================================
+WHEN THINGS GO WRONG
+==================================================
+
+Problem: Site not loading
+  → Check Vercel dashboard → Deployments → see error logs
+
+Problem: API not working
+  → Check Railway dashboard → your service → logs
+
+Problem: Database errors
+  → Check Supabase → your project → Logs → API logs
+
+Problem: Domain not working
+  → DNS changes take up to 24 hours to propagate
+  → Check: dnschecker.org → type provinceapp.in
+
+Problem: Login not working
+  → Check JWT_SECRET is same in Railway env vars
+  → Check SUPABASE_SERVICE_KEY is correct
+
+Problem: Real-time chat not working
+  → Check VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Vercel
+
+
+==================================================
+SUPPORT
+==================================================
+
+All code is modular and documented.
+Each file has comments explaining what it does.
+To add/edit content: change data in the pages files.
+To add routes: add to App.jsx and backend/server.js.
+
+Province — Your Campus, Everything.
+provinceapp.in
+==================================================
